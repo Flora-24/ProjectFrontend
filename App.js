@@ -2,7 +2,6 @@ import Welcomes from "./Screens/Welcomes.js";
 import SecondPage from "./Screens/SecondPage.js";
 import Screen3 from "./Screens/Screen3.js";
 import Screen4 from "./Screens/Screen4.js";
-import Chat from "./Screens/Chat.js";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useFonts } from "expo-font";
@@ -29,7 +28,6 @@ export default function App() {
         <Stack.Screen name="SecondPage" component={SecondPage} />
         <Stack.Screen name="Screen3" component={Screen3} />
         <Stack.Screen name="Screen4" component={Screen4} />
-        <Stack.Screen name="Chat" component={Chat} />
       </Stack.Navigator>
     </NavigationContainer>
   );

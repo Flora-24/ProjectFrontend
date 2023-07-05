@@ -5,130 +5,140 @@ import {
   TouchableOpacity,
   ImageBackground,
   ScrollView,
-  Button,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import RNTextArea from "@freakycoder/react-native-text-area";
-import axios from "axios";
-
-// Perform the connection and handle the response and error here
 
 export default function Screen4() {
+  const [text, setText] = useState("");
+  const [sentiment, setSentiment] = useState("");
+  const submitText = (e) => {
+    fetch(`http://192.168.43.251:3001/sentiment?text=${text}`).then((res) => {
+      res.json().then((data) => {
+        console.log(data);
+        setSentiment(data.sentiment);
+      });
+    });
+  };
 
-  const YourComponent = () => {
-    const [data, setData] = useState(null);
+  const [quote, setQuote] = useState([]);
 
-    useEffect(() => {
-      fetchData();
-    }, []);
-
-    const fetchData = async () => {
-      const handleSend = async (newMessage = []) => {
-        try {
-          const response = await axios.get(
-            "http://localhost:5000"
-          );
-          setData(response.data);
-        } catch (error) {
-          console.error(error);
-        }
-      };
-
-      // const [text, setText] = useState("");
-      // URL url = new URL("http://localhost:PORT");
-      // HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-      // connection.setRequestMethod("GET");
-      // const submitText = (e) => {
-      //   console.log("rejd");
-      //   fetch(`sentiment?text=${text}`).then((res) =>
-      //     res.json().then((data) => {
-      //       // Setting a data from api
-      //       setdata({
-      //         name: data.Name,
-      //         age: data.Age,
-      //         date: data.Date,
-      //         programming: data.programming,
-      //       });
-      //     })
-      //   );
-      // };
-      YourComponent;
-
-    };
-  }
-
+  const fetchQuotes = () => {
+    fetch(`http://192.168.43.251:3001/quotes?sentiment=${sentiment}`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        setQuote(data);
+      });
+  };
+  useEffect(() => {
+    fetchQuotes();
+  }, [sentiment]);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Hey, How are you doing today?</Text>
-      <RNTextArea
-        maxCharLimit={100}
-        placeholderTextColor="blue"
-        exceedCharCountColor="#990606"
-        placeholder={"Write your review..."}
-        onChangeText={(text) => setText(text)}
-        style={styles.TextArea}
-      ></RNTextArea>
-      {/* <Button
-        onPress={(e) => submitText(e)}
-        title="Submit"
-        color="#841584"
-        width="40"
-        accessibilityLabel="Learn more about this purple button"
-      /> */}
-      <TouchableOpacity onPress={(e) => submitText(e)} >
-        <View>
-          <Text style={styles.Submit}> Submit</Text>
-        </View>
-      </TouchableOpacity>
-      <StatusBar style="auto" />
+      <ImageBackground
+        resizeMode="cover"
+        style={styles.backgroundIm}
+        source={require("../assets/img3.jpg")}
+      >
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
+        >
+          <Text style={styles.header}>
+            <Text style={styles.Intro}>
+              The power of affirmations lies in repeating them to yourself
+              regularly to reinforce the positive belief...
+              {/* <Text style={styles.Nelson}> -Nelson Mandela</Text> */}
+            </Text>
+          </Text>
+
+          <RNTextArea
+            maxCharLimit={100}
+            placeholderTextColor="black"
+            exceedCharCountColor="#990606"
+            placeholder={"Tell us how you are feeling..."}
+            onChangeText={(text) => setText(text)}
+            style={styles.TextArea}
+          >
+            <Text style={styles.Type}>
+              {quote.text}
+              {quote.author}
+            </Text>
+          </RNTextArea>
+          <TouchableOpacity onPress={(e) => submitText(e)}>
+            <View>
+              <Text style={styles.Submit}> Submit </Text>
+            </View>
+          </TouchableOpacity>
+        </ScrollView>
+        <StatusBar style="auto" />
+      </ImageBackground>
     </View>
   );
 }
 
-  const styles = StyleSheet.create({
-    container: {
-      backgroundColor: "black",
-      flex: 1,
-    
-      flexDirection: "column",
-      justifyContent: "space-around",
-    },
-    backgroundIm: {
-      width: "100%",
-      height: "100%",
-    },
-    header: {
-      color: "white",
-      fontWeight: "bold",
-      padding: 30,
-      marginTop: 40,
-      marginBottom: 40,
-      textAlign: "center",
-      fontSize: 24,
-    },
-    TextArea: {
-      padding: 10,
-      width: "80%",
-      height: "40%",
-      borderRadius: 20,
-      alignSelf: "center",
-    },
-    scrollview: {
-      width: "100%",
-      height: "150%",
-    },
-    Submit: {
-      marginTop: 20,
-      color: "white",
-      alignSelf: "center",
-      fontSize: 16,
-      backgroundColor: "#B46EF9",
-      width: 150,
-      borderWidth: 1,
-      borderRadius: 20,
-      textAlign: "center",
-      padding: 12,
-    },
-  });
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "black",
+    flex: 1,
+
+    flexDirection: "column",
+    justifyContent: "space-around",
+  },
+  backgroundIm: {
+    width: "100%",
+    height: "100%",
+  },
+  header: {
+    padding: 30,
+    marginTop: 50,
+    marginBottom: 40,
+    textAlign: "center",
+  },
+  Intro: {
+    color: "white",
+    fontWeight: 500,
+    textAlign: "center",
+    fontSize: 26,
+    fontFamily: "Mulish2",
+  },
+  TextArea: {
+    padding: 10,
+    width: "80%",
+    height: "40%",
+    borderRadius: 20,
+    alignSelf: "center",
+  },
+  Type: {
+    // marginBottom: 40,
+    color: "blue",
+    fontSize: 22,
+  },
+  scrollview: {
+    width: "100%",
+    height: "150%",
+  },
+  Submit: {
+    marginTop: 20,
+    color: "white",
+    alignSelf: "center",
+    fontSize: 16,
+    fontWeight: "bold",
+    backgroundColor: "#B46EF9",
+    width: 150,
+    borderWidth: 1,
+    borderRadius: 20,
+    textAlign: "center",
+    padding: 12,
+  },
+  Nelson: {
+    fontSize: 20,
+    color: "#B46EF9",
+    fontFamily: "PlayfairItalics",
+  },
+});

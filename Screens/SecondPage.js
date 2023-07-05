@@ -6,12 +6,22 @@ import {
   TextInput,
   TouchableOpacity,
   ImageBackground,
-  ScrollView,
-  placeholderhandler,
+  ScrollView, Alert
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 
-export default function SecondPage({navigation}) {
+export default function SecondPage({ navigation }) {
+ 
+    const [textInput, setTextInput] = useState('');
+
+    const handleButtonClick = () => {
+      if (textInput.trim() === '') {
+        Alert.alert('Error', 'Please enter your name.');
+      } else {
+               // Navigate to the next page
+               navigation.navigate("Screen3", { inputData: textInput });
+             }
+    };
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -31,14 +41,15 @@ export default function SecondPage({navigation}) {
           <View style={styles.Style}>
             <Text style={styles.Styletext}>Please tell us your name</Text>
             <TextInput
+              value={textInput}
               style={styles.TextInput}
               placeholderTextColor="white"
               placeholder="Name Here..."
-              onChangeText={placeholderhandler}
+              onChangeText={setTextInput}
             />
           </View>
           <TouchableOpacity
-            onPress={() => navigation.navigate("Screen3")}
+            onPress={handleButtonClick}
             activeOpacity={0.8}
           >
             <View style={styles.button1}>
@@ -56,6 +67,7 @@ export default function SecondPage({navigation}) {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

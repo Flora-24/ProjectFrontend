@@ -13,7 +13,7 @@ export default function Screen3({navigation}) {
         >
           <View style={styles.Header}>
             <Text style={styles.Header}>
-              Hey , Please let us know the areas you want to improve on..
+               Please let us know the areas you want to improve on..
             </Text>
           </View>
           <View style={styles.Boxa}>
@@ -49,11 +49,6 @@ export default function Screen3({navigation}) {
           <TouchableOpacity onPress={() => navigation.navigate("Screen4")}>
             <View>
               <Text style={styles.skip}>Skip for now</Text>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate("Chat")}>
-            <View>
-              <Text style={styles.Chat}>Continue</Text>
             </View>
           </TouchableOpacity>
           <StatusBar style="auto" />
